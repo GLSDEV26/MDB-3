@@ -1,0 +1,560 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="apple-mobile-web-app-title" content="MDB Analyse">
+  <meta name="theme-color" content="#09090f">
+  <title>MDB Analyser</title>
+  <link rel="manifest" href="manifest.json">
+  <link rel="apple-touch-icon" href="icon-192.png">
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+<div id="app">
+
+  <!-- ══════════ SIDEBAR ══════════ -->
+  <aside id="sidebar">
+    <div class="sidebar-brand">
+      <div class="sidebar-brand-title">MdB Analyse</div>
+      <div class="sidebar-brand-sub">Marchand de Biens</div>
+    </div>
+    <nav class="sidebar-nav">
+      <div class="sidebar-nav-item active" data-page="dossiers">
+        <svg class="nav-icon" viewBox="0 0 24 24"><rect x="3" y="3" width="7" height="7" rx="1.5"/><rect x="14" y="3" width="7" height="7" rx="1.5"/><rect x="3" y="14" width="7" height="7" rx="1.5"/><rect x="14" y="14" width="7" height="7" rx="1.5"/></svg>
+        Dossiers
+      </div>
+      <div class="sidebar-nav-item" data-page="nouveau">
+        <svg class="nav-icon" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M12 8v8M8 12h8"/></svg>
+        Nouvelle fiche
+      </div>
+      <div class="sidebar-nav-item" data-page="insights">
+        <svg class="nav-icon" viewBox="0 0 24 24"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>
+        Insights
+      </div>
+      <div class="sidebar-nav-item" data-page="parametres">
+        <svg class="nav-icon" viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>
+        Paramètres
+      </div>
+      <div class="sidebar-nav-item" data-page="export">
+        <svg class="nav-icon" viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
+        Export / Import
+      </div>
+    </nav>
+    <div class="sidebar-bottom">
+      <div class="sidebar-nav-item" style="opacity:0.5;cursor:default;font-size:11px;color:var(--text3)">
+        <svg class="nav-icon" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M12 8v4M12 16h.01"/></svg>
+        100% local · Offline
+      </div>
+    </div>
+  </aside>
+
+  <!-- ══════════ MAIN CONTENT ══════════ -->
+  <main id="content">
+
+    <!-- ── PAGE : DOSSIERS ── -->
+    <div class="page active" id="page-dossiers">
+      <div class="page-header">
+        <div class="page-header-row">
+          <div>
+            <h1>Dossiers</h1>
+            <p>Analyse froidement. Cherche la structure.</p>
+          </div>
+          <button class="fab" id="btn-nouveau">
+            <svg width="14" height="14" viewBox="0 0 24 24" stroke="currentColor" fill="none" stroke-width="2" stroke-linecap="round"><path d="M12 5v14M5 12h14"/></svg>
+            Nouveau
+          </button>
+        </div>
+      </div>
+
+      <div class="filters-area">
+        <div class="filters-row">
+          <input class="filter-pill" id="filter-search" type="search" placeholder="🔍  Recherche ID, ville, notes…">
+          <select class="filter-pill" id="filter-type">
+            <option value="">Tous les types</option>
+            <option>Achat/Revente</option><option>Découpe</option>
+            <option>Division parcellaire</option><option>Transformation</option>
+            <option>Immeuble de rapport</option><option>VEFA</option>
+          </select>
+        </div>
+        <div class="filters-row">
+          <select class="filter-pill" id="filter-verdict">
+            <option value="">Tous verdicts</option>
+            <option>Je fais</option><option>Je modifie</option>
+            <option>Je refuse</option><option>À étudier</option>
+          </select>
+          <select class="filter-pill" id="filter-tag">
+            <option value="">Tous tags</option>
+            <option>Rapide</option><option>Marge forte</option><option>TVA sensible</option>
+            <option>Copro</option><option>Urbanisme</option><option>Risque haut</option>
+            <option>Négociation</option><option>Info asymétrique</option>
+            <option>Optim. fiscale</option><option>Découpe</option><option>Timing</option>
+          </select>
+          <input class="filter-pill" id="filter-marge-min" type="number" placeholder="Marge % min" style="min-width:80px;max-width:120px">
+          <input class="filter-pill" id="filter-marge-max" type="number" placeholder="max" style="min-width:60px;max-width:80px">
+        </div>
+      </div>
+
+      <div class="table-wrap-glass">
+        <div class="table-header-bar">
+          <span id="dossiers-count" class="text-muted" style="font-size:12px">0 dossier</span>
+        </div>
+        <div id="dossiers-list-wrap">
+          <!-- Table rendered by JS -->
+        </div>
+      </div>
+    </div>
+
+    <!-- ── PAGE : NOUVEAU / MODIFIER ── -->
+    <div class="page" id="page-nouveau">
+      <div class="page-header">
+        <div class="page-header-row">
+          <div>
+            <h1>Nouvelle fiche</h1>
+            <p>Ralentis. Structure d'abord.</p>
+          </div>
+        </div>
+      </div>
+
+      <form id="form-dossier" onsubmit="return false">
+
+        <!-- S1 -->
+        <div class="accordion open">
+          <div class="accordion-header">
+            <span class="acc-num">01</span>
+            <span class="acc-label">Identité de l'opération</span>
+            <svg class="acc-chevron" viewBox="0 0 24 24"><path d="M6 9l6 6 6-6"/></svg>
+          </div>
+          <div class="accordion-body">
+            <div class="field">
+              <label>ID Dossier *</label>
+              <input type="text" id="dossier_id" placeholder="Ex : MDB-2024-Lyon-001" autocomplete="off">
+            </div>
+            <div class="fields-row">
+              <div class="field">
+                <label>Type d'opération</label>
+                <select id="type_operation">
+                  <option value="">—</option>
+                  <option>Achat/Revente</option><option>Découpe</option>
+                  <option>Division parcellaire</option><option>Transformation</option>
+                  <option>Immeuble de rapport</option><option>VEFA</option>
+                </select>
+              </div>
+              <div class="field">
+                <label>Structure juridique</label>
+                <select id="structure">
+                  <option value="">—</option>
+                  <option>EI</option><option>SAS</option><option>SARL</option>
+                  <option>SCI à l'IS</option><option>Autre</option>
+                </select>
+              </div>
+            </div>
+            <div class="fields-row">
+              <div class="field">
+                <label>Ville</label>
+                <input type="text" id="localisation_ville" placeholder="Lyon">
+              </div>
+              <div class="field">
+                <label>Code postal</label>
+                <input type="text" id="localisation_cp" placeholder="69001" inputmode="numeric">
+              </div>
+            </div>
+            <div class="fields-row">
+              <div class="field">
+                <label>Surface (m²)</label>
+                <input type="number" id="surface_m2" placeholder="120" inputmode="decimal">
+              </div>
+              <div class="field">
+                <label>Nb lots</label>
+                <input type="number" id="nb_lots" placeholder="4" inputmode="numeric">
+              </div>
+            </div>
+            <div class="check-group">
+              <div class="check-row">
+                <input type="checkbox" id="copro">
+                <label for="copro">En copropriété</label>
+              </div>
+            </div>
+            <div class="fields-row">
+              <div class="field">
+                <label>Date d'achat</label>
+                <input type="date" id="date_achat">
+              </div>
+              <div class="field">
+                <label>Date revente</label>
+                <input type="date" id="date_revente">
+              </div>
+            </div>
+            <div class="field field-mt">
+              <label>Pourquoi ce type d'opération ici ?</label>
+              <textarea id="question_strategique_pourquoi" placeholder="Raisonnement stratégique initial…"></textarea>
+            </div>
+          </div>
+        </div>
+
+        <!-- S2 -->
+        <div class="accordion">
+          <div class="accordion-header">
+            <span class="acc-num">02</span>
+            <span class="acc-label">Mécanique financière</span>
+            <svg class="acc-chevron" viewBox="0 0 24 24"><path d="M6 9l6 6 6-6"/></svg>
+          </div>
+          <div class="accordion-body">
+            <div class="fields-row">
+              <div class="field">
+                <label>Prix d'achat (€)</label>
+                <input type="number" id="prix_achat" placeholder="350 000" inputmode="decimal">
+              </div>
+              <div class="field">
+                <label>Prix revente total (€)</label>
+                <input type="number" id="prix_revente_total" placeholder="480 000" inputmode="decimal">
+              </div>
+            </div>
+            <div class="field">
+              <label>Travaux estimés (€)</label>
+              <input type="number" id="travaux_estimes" placeholder="50 000" inputmode="decimal">
+            </div>
+            <div class="fields-row">
+              <div class="field">
+                <label>Frais notaire</label>
+                <select id="frais_notaire_mode">
+                  <option value="Estimation">Estimation auto</option>
+                  <option value="Manuel">Saisie manuelle</option>
+                </select>
+              </div>
+              <div class="field">
+                <label>Taux frais notaire</label>
+                <input type="number" id="frais_notaire_taux" step="0.001" placeholder="0.075" inputmode="decimal">
+              </div>
+            </div>
+            <div class="field">
+              <label>Frais notaire manuels (€)</label>
+              <input type="number" id="frais_notaire_montant_manuel" placeholder="Si mode manuel" inputmode="decimal">
+            </div>
+            <div class="computed-block">
+              <div class="computed-row">
+                <span class="computed-label">Frais notaire estimés</span>
+                <span class="computed-val neutral" id="computed-fn">—</span>
+              </div>
+              <div class="computed-row">
+                <span class="computed-label">Marge brute estimée</span>
+                <span class="computed-val" id="computed-marge-brute">—</span>
+              </div>
+              <div class="computed-row">
+                <span class="computed-label">Marge %</span>
+                <span class="computed-val" id="computed-marge-pct">—</span>
+              </div>
+              <div class="computed-row">
+                <span class="computed-label">Prix/m² achat</span>
+                <span class="computed-val neutral" id="computed-pm2-achat">—</span>
+              </div>
+              <div class="computed-row">
+                <span class="computed-label">Prix/m² revente</span>
+                <span class="computed-val neutral" id="computed-pm2-revente">—</span>
+              </div>
+            </div>
+            <div class="micro-copy">Objectif : entraîner l'œil. Approximatif mais cohérent.</div>
+          </div>
+        </div>
+
+        <!-- S3 -->
+        <div class="accordion">
+          <div class="accordion-header">
+            <span class="acc-num">03</span>
+            <span class="acc-label">Fiscalité</span>
+            <svg class="acc-chevron" viewBox="0 0 24 24"><path d="M6 9l6 6 6-6"/></svg>
+          </div>
+          <div class="accordion-body">
+            <div class="fields-row">
+              <div class="field">
+                <label>Régime TVA</label>
+                <select id="tva_type">
+                  <option value="">—</option>
+                  <option>Marge</option><option>Total</option><option>Inconnue</option>
+                </select>
+              </div>
+              <div class="field">
+                <label>Montant TVA (€)</label>
+                <input type="number" id="tva_montant" placeholder="Optionnel" inputmode="decimal">
+              </div>
+            </div>
+            <div class="fields-row">
+              <div class="field">
+                <label>Statut du bien</label>
+                <select id="bien_statut">
+                  <option value="">—</option>
+                  <option>Ancien</option><option>Assimilé neuf</option>
+                  <option>Neuf/VEFA</option><option>Inconnu</option>
+                </select>
+              </div>
+              <div class="field">
+                <label>Risque requalification</label>
+                <select id="risque_requalification">
+                  <option value="">—</option>
+                  <option>Faible</option><option>Moyen</option>
+                  <option>Élevé</option><option>Inconnu</option>
+                </select>
+              </div>
+            </div>
+            <div class="field">
+              <label>Taux IS estimé</label>
+              <input type="number" id="is_estime_pct" step="0.01" placeholder="0.25" inputmode="decimal">
+            </div>
+            <div class="computed-block">
+              <div class="computed-row">
+                <span class="computed-label">IS estimé</span>
+                <span class="computed-val" id="computed-is">—</span>
+              </div>
+              <div class="computed-row">
+                <span class="computed-label">Marge après IS</span>
+                <span class="computed-val" id="computed-ap-is">—</span>
+              </div>
+            </div>
+            <div class="field field-mt">
+              <label>Commentaire fiscal</label>
+              <textarea id="commentaire_fiscal" placeholder="Où l'État prend le plus ici ? Pourquoi ?"></textarea>
+            </div>
+          </div>
+        </div>
+
+        <!-- S4 -->
+        <div class="accordion">
+          <div class="accordion-header">
+            <span class="acc-num">04</span>
+            <span class="acc-label">Risques</span>
+            <svg class="acc-chevron" viewBox="0 0 24 24"><path d="M6 9l6 6 6-6"/></svg>
+          </div>
+          <div class="accordion-body">
+            <div class="check-group">
+              <div class="check-row">
+                <input type="checkbox" id="risque_urbanisme">
+                <label for="risque_urbanisme">Risque urbanisme (PLU, règlement…)</label>
+              </div>
+              <div class="check-row">
+                <input type="checkbox" id="permis">
+                <label for="permis">Permis de construire / déclaration préalable</label>
+              </div>
+              <div class="check-row">
+                <input type="checkbox" id="division_cadastrale">
+                <label for="division_cadastrale">Division cadastrale requise</label>
+              </div>
+            </div>
+            <div class="fields-row">
+              <div class="field">
+                <label>Marché</label>
+                <select id="marche_tendu">
+                  <option value="">—</option>
+                  <option>Tendu</option><option>Liquide</option><option>Inconnu</option>
+                </select>
+              </div>
+              <div class="field">
+                <label>Risque délais</label>
+                <select id="delais_risque">
+                  <option value="">—</option>
+                  <option>Faible</option><option>Moyen</option><option>Élevé</option>
+                </select>
+              </div>
+            </div>
+            <div class="field">
+              <label>Notes risques</label>
+              <textarea id="risques_notes" placeholder="Détails, incertitudes, points de vigilance…"></textarea>
+            </div>
+            <div class="risk-display">
+              <div class="risk-top">
+                <span class="risk-num" id="risk-score-num">0</span>
+                <span class="risk-denom">/100</span>
+              </div>
+              <div class="risk-bar-bg">
+                <div id="risk-bar-fill" class="risk-bar-fill" style="width:0%"></div>
+              </div>
+              <div class="risk-detail" id="risk-detail">Aucun facteur de risque identifié</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- S5 -->
+        <div class="accordion">
+          <div class="accordion-header">
+            <span class="acc-num">05</span>
+            <span class="acc-label">Stratégie invisible</span>
+            <svg class="acc-chevron" viewBox="0 0 24 24"><path d="M6 9l6 6 6-6"/></svg>
+          </div>
+          <div class="accordion-body">
+            <div class="check-group">
+              <div class="check-row">
+                <input type="checkbox" id="gain_negociation_achat">
+                <label for="gain_negociation_achat">Négociation à l'achat</label>
+              </div>
+              <div class="check-row">
+                <input type="checkbox" id="gain_information">
+                <label for="gain_information">Avantage informationnel</label>
+              </div>
+              <div class="check-row">
+                <input type="checkbox" id="gain_optimisation_fiscale">
+                <label for="gain_optimisation_fiscale">Optimisation fiscale</label>
+              </div>
+              <div class="check-row">
+                <input type="checkbox" id="gain_decoupe_intelligente">
+                <label for="gain_decoupe_intelligente">Découpe intelligente</label>
+              </div>
+              <div class="check-row">
+                <input type="checkbox" id="gain_timing">
+                <label for="gain_timing">Timing de marché</label>
+              </div>
+            </div>
+            <div class="field field-mt">
+              <label>Pattern — Pourquoi cet investisseur a gagné ?</label>
+              <textarea id="pattern_note" placeholder="Quel mécanisme sous-jacent ? Quelle logique se répète ?"></textarea>
+            </div>
+          </div>
+        </div>
+
+        <!-- S6 -->
+        <div class="accordion">
+          <div class="accordion-header">
+            <span class="acc-num">06</span>
+            <span class="acc-label">Verdict personnel</span>
+            <svg class="acc-chevron" viewBox="0 0 24 24"><path d="M6 9l6 6 6-6"/></svg>
+          </div>
+          <div class="accordion-body">
+            <div class="field">
+              <label>Décision</label>
+              <select id="verdict">
+                <option value="">—</option>
+                <option>Je fais</option><option>Je modifie</option>
+                <option>Je refuse</option><option>À étudier</option>
+              </select>
+            </div>
+            <div class="field">
+              <label>Modifications à apporter</label>
+              <textarea id="modifications_a_faire" placeholder="Ce qui changerait la décision…"></textarea>
+            </div>
+            <div class="field">
+              <label>Indice de confiance</label>
+              <div class="slider-wrap">
+                <div class="slider-row">
+                  <span class="tick">1</span>
+                  <input type="range" id="note_confiance" min="1" max="10" step="1" value="5">
+                  <span class="tick">10</span>
+                  <span class="slider-val" id="note_confiance_display">5</span>
+                </div>
+              </div>
+            </div>
+            <div class="field">
+              <label>Résumé 30 secondes</label>
+              <textarea id="resume_30s" placeholder="Pourquoi oui ou non ? Quel est le facteur décisif ?"></textarea>
+            </div>
+          </div>
+        </div>
+
+        <div class="btn-group">
+          <button type="button" class="btn btn-primary" id="btn-enregistrer">Enregistrer</button>
+          <button type="button" class="btn btn-secondary" id="btn-dupliquer">Enregistrer &amp; Dupliquer</button>
+          <button type="button" class="btn btn-danger hidden" id="btn-supprimer">Supprimer ce dossier</button>
+        </div>
+      </form>
+    </div>
+
+    <!-- ── PAGE : INSIGHTS ── -->
+    <div class="page" id="page-insights">
+      <div class="page-header">
+        <h1>Insights &amp; Similitudes</h1>
+        <p>Patterns sans boîte noire. Logique visible.</p>
+      </div>
+      <div id="insights-content"></div>
+    </div>
+
+    <!-- ── PAGE : PARAMÈTRES ── -->
+    <div class="page" id="page-parametres">
+      <div class="page-header">
+        <h1>Paramètres</h1>
+        <p>Ces valeurs influencent tous les calculs et tags.</p>
+      </div>
+      <div class="setting-group">
+        <div id="settings-items"></div>
+      </div>
+      <div class="setting-group" style="margin-top:20px">
+        <div class="setting-item" style="flex-direction:column;align-items:flex-start;gap:8px">
+          <div class="setting-label">Installation iPhone</div>
+          <div class="setting-sub" style="line-height:1.7">
+            1. Ouvrez l'app dans <strong>Safari</strong><br>
+            2. Bouton <strong>Partager</strong> (carré ↑)<br>
+            3. → <strong>"Sur l'écran d'accueil"</strong><br>
+            4. L'app fonctionne ensuite <strong>hors connexion</strong>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ── PAGE : EXPORT / IMPORT ── -->
+    <div class="page" id="page-export">
+      <div class="page-header">
+        <h1>Export / Import</h1>
+        <p>Données 100% locales. Aucun serveur.</p>
+      </div>
+      <div class="export-zone">
+        <div class="export-zone-icon">↓</div>
+        <h3>Exporter</h3>
+        <p><span id="export-count">0</span> dossier(s) — JSON structuré</p>
+        <button class="btn btn-primary" id="btn-export" style="max-width:280px;margin:0 auto">Télécharger JSON</button>
+      </div>
+      <div class="export-zone">
+        <div class="export-zone-icon">↑</div>
+        <h3>Importer</h3>
+        <p>Fusion par dossier_id. Dédoublonnage automatique.</p>
+        <button class="btn btn-secondary" id="btn-import-trigger" style="max-width:280px;margin:0 auto">Choisir un fichier JSON</button>
+        <input type="file" id="file-import" accept=".json" class="hidden">
+      </div>
+      <div class="setting-group">
+        <div class="setting-item" style="flex-direction:column;align-items:flex-start;gap:4px">
+          <div class="setting-label">Sauvegarde iOS</div>
+          <div class="setting-sub">Exportez régulièrement vers iCloud Drive ou Mail pour ne rien perdre si le cache Safari est vidé.</div>
+        </div>
+      </div>
+    </div>
+
+  </main><!-- #content -->
+
+  <!-- ══════════ MOBILE NAV ══════════ -->
+  <nav id="mobile-nav">
+    <div class="mobile-nav-inner">
+      <button class="mobile-nav-btn active" data-page="dossiers">
+        <svg viewBox="0 0 24 24"><rect x="3" y="3" width="7" height="7" rx="1.5"/><rect x="14" y="3" width="7" height="7" rx="1.5"/><rect x="3" y="14" width="7" height="7" rx="1.5"/><rect x="14" y="14" width="7" height="7" rx="1.5"/></svg>
+        Dossiers
+      </button>
+      <button class="mobile-nav-btn" data-page="nouveau">
+        <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M12 8v8M8 12h8"/></svg>
+        Analyse
+      </button>
+      <button class="mobile-nav-btn" data-page="insights">
+        <svg viewBox="0 0 24 24"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>
+        Insights
+      </button>
+      <button class="mobile-nav-btn" data-page="parametres">
+        <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>
+        Réglages
+      </button>
+      <button class="mobile-nav-btn" data-page="export">
+        <svg viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
+        Export
+      </button>
+    </div>
+  </nav>
+
+  <!-- DETAIL MODAL -->
+  <div class="modal-overlay" id="detail-modal">
+    <div class="modal">
+      <div class="modal-drag"></div>
+      <div id="detail-modal-body"></div>
+    </div>
+  </div>
+
+  <!-- TOAST -->
+  <div class="toast" id="toast"></div>
+
+</div><!-- #app -->
+<script src="app.js"></script>
+</body>
+</html>

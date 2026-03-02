@@ -1,0 +1,9 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="192" height="192" viewBox="0 0 192 192">
+  <rect width="192" height="192" rx="32" fill="#0f0f0f"/>
+  <rect x="40" y="55" width="112" height="12" rx="3" fill="#c8b87a"/>
+  <rect x="40" y="78" width="80" height="8" rx="2" fill="#3a3a3a"/>
+  <rect x="40" y="95" width="95" height="8" rx="2" fill="#3a3a3a"/>
+  <rect x="40" y="112" width="70" height="8" rx="2" fill="#3a3a3a"/>
+  <rect x="40" y="132" width="112" height="3" rx="1" fill="#2e2e2e"/>
+  <text x="96" y="160" text-anchor="middle" font-family="Georgia,serif" font-size="13" fill="#5e5b57" letter-spacing="2">MDB</text>
+</svg>
