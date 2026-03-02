@@ -432,7 +432,7 @@ input.filter-pill { flex: 1.5; min-width: 150px; }
 
 /* ───────────────── MOBILE NAV PREMIUM FIX ───────────────── */
 
-#mobile-nav {
+.mobile-nav {
   position: fixed;
   bottom: 0;
   left: 0;
