@@ -525,6 +525,7 @@ min-width: 0;
   height:28px;
   display:block;
 }
+.mobile-nav-btn{ font-size:11px; letter-spacing:0.02em; }
 
 /* Form internal top spacing */
 .accordion-body > *:first-child { margin-top: 14px; }
