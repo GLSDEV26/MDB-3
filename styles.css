@@ -445,33 +445,38 @@ input.filter-pill { flex: 1.5; min-width: 150px; }
   box-shadow: 0 -1px 0 rgba(255,255,255,0.05);
 }
 
-.mobile-nav-inner {
-  display: flex;
-  height: 72px; /* barre plus haute */
-  align-items: stretch;
+.mobile-nav-inner{
+  display:flex;
+  height:72px;
+  align-items:center;
+  justify-content:space-around;
 }
-
 .mobile-nav-btn {
-  flex: 1;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  gap: 5px;
-  background: none;
-  border: none;
-  color: var(--text3);
-  font-size: 10px;
-  font-family: var(--font-ui);
-  font-weight: 500;
-  letter-spacing: 0.03em;
-  text-transform: uppercase;
-  cursor: pointer;
-  padding: 10px 4px 8px;
-  -webkit-tap-highlight-color: transparent;
-  transition: color 0.15s;
-  position: relative;
-  min-width: 0;
+flex: 1;
+height: 72px;            
+display: flex;
+flex-direction: column;
+align-items: center;
+justify-content: center;
+gap: 6px;
+
+background: none;
+border: none;
+color: var(--text3);
+font-size: 11px;
+font-family: var(--font-ui);
+font-weight: 500;
+letter-spacing: 0.02em;
+text-transform: uppercase;
+
+cursor: pointer;
+padding: 8px 0;             
+line-height: 1;          
+
+-webkit-tap-highlight-color: transparent;
+transition: color 0.15s;
+position: relative;
+min-width: 0;
 }
 
 /* Indicateur actif : point violet sous l'icône */
@@ -485,7 +490,7 @@ input.filter-pill { flex: 1.5; min-width: 150px; }
   height: 4px;
   border-radius: 50%;
   background: var(--violet);
-  opacity: 0;
+  opacity: 1;
 }
 
 /* Zone de tap plus grande */
@@ -515,9 +520,10 @@ input.filter-pill { flex: 1.5; min-width: 150px; }
   color: var(--violet);
 }
 
-.mobile-nav-btn.active svg {
-  stroke-width: 2;
-  filter: drop-shadow(0 0 6px rgba(123,110,246,0.5));
+.mobile-nav-btn svg{
+  width:28px;
+  height:28px;
+  display:block;
 }
 
 /* Form internal top spacing */
